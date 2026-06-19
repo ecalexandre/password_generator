@@ -27,6 +27,7 @@ def strong_password_generator(get_value_entry, display_place_entry) -> None:
 import tkinter as tk; from tkinter import *
 
 
+
 #creating the window
 window = Tk()
 
@@ -60,10 +61,9 @@ text.grid(row=0, column=0)
 
 
 
-
 #'Amount of characters' text
 label : Label = tk.Label(window,
-	             text='Put the amount of characters that you want your password to have here (HAS TO BE A NUMBER):',
+	             text='Put the amount of characters that you want your password to have here (HAS TO BE A NUMBER) and press Enter:',
 	             font=('Arial', 15, 'bold'),
 	             bg='black',
 	             fg='#699e24')
@@ -80,6 +80,13 @@ generate_password_button : Button = tk.Button(window,
 	                                 bg='white',
 	                                 command=lambda: strong_password_generator(character_amount_entry, password_displayed_entry))
 
+# Bind the Enter key to the entry box
+def enter_pressed(event):
+    character_amount_entry.get()
+    strong_password_generator(character_amount_entry, password_displayed_entry)
+
+character_amount_entry.bind('<Return>', enter_pressed) #checks if user pressed enter
+
 generate_password_button.grid(row=2,column=1)
 
 label2 : Label = tk.Label(window,
@@ -91,7 +98,7 @@ label2.grid(row=4,column=0)
 
 #Password displayed entry
 password_displayed_entry : Entry = Entry(window,
-	                                    font=('Arial', 50))
+	                                    font=('Arial', 50),)
 password_displayed_entry.grid(row=5,column=0)
 
 
