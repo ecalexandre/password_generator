@@ -35,8 +35,6 @@ def strong_password_generator(get_value_entry, symbol_option, display_place_entr
           display_place_entry.insert(0, random_password_without_symbols)
 
 
-
-
 import tkinter as tk; from tkinter import *
 
 
@@ -123,10 +121,14 @@ character_amount_entry.grid(row=5,column=0)
 
 
 # Bind the Enter key to the entry box
-def enter_pressed(event):
+def enter_pressed(event) -> None:
+    """
+    Gets the value of the entry of the character amount and calls the strong_password_generator() function to show the password
+    """
+
     character_amount_entry.get()
     strong_password_generator(character_amount_entry, Symbol_or_no_Symbols, password_displayed_entry)
-character_amount_entry.bind('<Return>', enter_pressed) #checks if user pressed enter
+character_amount_entry.bind('<Return>', enter_pressed) #checks if user pressed Enter
 
 
 #'Password' text
@@ -142,5 +144,22 @@ password_displayed_entry : Entry = Entry(window,
 	                                    font=('Arial', 50),)
 password_displayed_entry.grid(row=7,column=0)
 
+#copy password function for button
+def copy_text() -> None:
+   # 1. Clears the system clipboard
+   window.clipboard_clear()
+   # 2. Append the text from the password display entry
+   window.clipboard_append(password_displayed_entry.get())
+   # 3. Optional : keeps clipboard alive after window closes
+   window.update()
+
+copy_password_button : Button = tk.Button(window,
+	                                      text='Copy password',
+	                                      bg='black',
+	                                      fg='#f2e124',
+	                                      activebackground='black',
+	                                      activeforeground='#f2e124',
+	                                      command=copy_text)
+copy_password_button.grid(row=7, column=1)	                                         
 
 window.mainloop()
