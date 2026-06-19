@@ -1,5 +1,5 @@
 import random
-def strong_password_generator(get_value_entry, symbol_option, number_option, display_place_entry) -> None:
+def strong_password_generator(get_value_entry:Entry,symbol_option:IntVar,number_option:IntVar,display_place_entry:Entry) -> None:
     """
     Displays a chosen amount of random characters for a strong password in the window
 
@@ -25,6 +25,7 @@ def strong_password_generator(get_value_entry, symbol_option, number_option, dis
     #Results for each options
     match symbol_option.get(), number_option.get():
     	
+    	# If Yes for both symbols and numbers ---> Password will mostly contain symbols and numbers
     	case 1,1:
     	  random_characters_with_numbers_and_symbols : random = random.choices(characters_with_numbers_and_symbols, k=val)
     	  
@@ -34,6 +35,7 @@ def strong_password_generator(get_value_entry, symbol_option, number_option, dis
     	  
     	  display_place_entry.insert(0,random_password_with_numbers_and_symbols)
     	
+    	# If Yes to symbols but No to numbers ---> Password will contain symbols but not numbers
     	case 1,2:
           random_characters_without_numbers : random = random.choices(characters_without_numbers, k=val)
           
@@ -43,6 +45,7 @@ def strong_password_generator(get_value_entry, symbol_option, number_option, dis
           
           display_place_entry.insert(0, random_password_without_numbers)
     	
+    	# If No to symbols but Yes to numbers ---> Password will contain numbers but not symbols
     	case 2,1:
           random_characters_without_symbols : random = random.choices(characters_without_symbols, k=val)
           
@@ -52,6 +55,7 @@ def strong_password_generator(get_value_entry, symbol_option, number_option, dis
           
           display_place_entry.insert(0, random_password_without_symbols)
     	
+    	# If No to both symbols and numbers ---> Password will not contain symbols or numbers
     	case 2,2:
           random_characters_without_symbols_and_numbers : random = random.choices(characters_without_symbols_and_numbers, k=val)
           
@@ -101,10 +105,10 @@ text.grid(row=3, column=2)
 
 #symbols/no symbols text
 symbols_label : Label = tk.Label(window,
-	                             text='Do you want symbols in your password or not',
+	                             text='Do you want symbols in your password',
 	                             font=('Arial', 15, 'bold'),
 	                             bg='black',
-	                             fg='#fc035a')
+	                             fg='#a024f2')
 symbols_label.grid(row=0,column=0)
 
 #Symbols/No symbols options
@@ -139,10 +143,10 @@ no_option_symbols.grid(row=2,column=0)
 
 #Numbers options text
 numbers_label : Label = tk.Label(window,
-	                            text='Do you want numbers in your password or not',
+	                            text='Do you want numbers in your password',
 	                            font=('Arial', 15, 'bold'),
 	                            bg='black',
-	                            fg='#fc035a')
+	                            fg='#d48f28')
 numbers_label.grid(row=3,column=0)
 
 #Numbers options
@@ -199,7 +203,7 @@ def enter_pressed(event) -> None:
 
     character_amount_entry.get()
     strong_password_generator(character_amount_entry, symbol_or_no_Symbols, numbers_or_no_numbers, password_displayed_entry)
-character_amount_entry.bind('<Return>', enter_pressed) #checks if user pressed Enter
+character_amount_entry.bind('<Return>', enter_pressed) #checks if user pressed Enter will call enter_pressed() function
 
 
 #'Password' text
