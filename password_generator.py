@@ -1,7 +1,16 @@
 import random
+
+# Strong password generator function
 def strong_password_generator(get_value_entry:Entry,symbol_option:IntVar,number_option:IntVar,display_place_entry:Entry) -> None:
     """
-    Displays a chosen amount of random characters for a strong password in the window
+    Displays a chosen amount of random chosen types of characters for a strong password in the 'display_place_entry'
+
+    
+    params:
+    1. 'get_value_entry' is the user's entry box so that he can type the amount of characters for his password.
+    2. 'symbol_option' is a variable for two options (symbols or no symbols).
+    3. 'number_option' is a variable for two options (numbers or no numbers)
+    4. 'display_place_entry' is the entry for the displayed password
 
     """
     characters_without_numbers : list[str] = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n'
@@ -22,7 +31,7 @@ def strong_password_generator(get_value_entry:Entry,symbol_option:IntVar,number_
     
     val : int = int(amount_of_characters)
     
-    #Results for each options
+    # Results for symbols and numbers options
     match symbol_option.get(), number_option.get():
     	
     	# If Yes for both symbols and numbers ---> Password will mostly contain symbols and numbers
@@ -68,40 +77,23 @@ def strong_password_generator(get_value_entry:Entry,symbol_option:IntVar,number_
 
 import tkinter as tk; from tkinter import *
 
-
-
 #creating the window
 window = Tk()
+
+window.resizable(0,0)
 
 #window background color
 window.configure(bg='black')
 
 #window Title
-window.title('Password generator app 🔒')
+window.title('Random Password Generator')
 
 #window's dimensions
-window.geometry('1000x600')
+window.geometry('1200x400')
 
 #app icon image
-app_icon : PhotoImage = tk.PhotoImage(file='C:\\Users\\ecalexandre\\Downloads\\padlorfe.png')
+app_icon : PhotoImage = tk.PhotoImage(file="C:\\Users\\ecalexandre\\Downloads\\password.png")
 window.iconphoto(True, app_icon)
-
-#text image
-photo : PhotoImage = PhotoImage(file="C:\\Users\\ecalexandre\\Downloads\\password.png")
-
-#displayed text in the window on top
-text : Label = tk.Label(window,
-	             text='Password generator 🔒',
-	             bg='black',
-	             fg='#8803fc',
-	             font=('Arial', 15, 'bold'),
-	             image=photo,
-	             compound='bottom')
-text.grid(row=3, column=2)
-
-
-
-
 
 #symbols/no symbols text
 symbols_label : Label = tk.Label(window,
@@ -109,7 +101,7 @@ symbols_label : Label = tk.Label(window,
 	                             font=('Arial', 15, 'bold'),
 	                             bg='black',
 	                             fg='#a024f2')
-symbols_label.grid(row=0,column=0)
+symbols_label.grid(row=1,column=0)
 
 #Symbols/No symbols options
 symbol_or_no_Symbols = IntVar()
@@ -124,7 +116,7 @@ yes_option_symbols : Radiobutton = Radiobutton(window,
 	                                           font=('Arial', 15, 'bold'),
 	                                           activebackground='black',
 	                                           activeforeground='#1c7a21')
-yes_option_symbols.grid(row=1,column=0)
+yes_option_symbols.grid(row=2,column=0)
 
 #no option
 no_option_symbols : Radiobutton = Radiobutton(window,
@@ -136,7 +128,7 @@ no_option_symbols : Radiobutton = Radiobutton(window,
 	                                          font=('Arial', 15, 'bold'),
 	                                          activebackground='black',
 	                                          activeforeground='#fc3503')
-no_option_symbols.grid(row=2,column=0)
+no_option_symbols.grid(row=3,column=0)
 
 
 
@@ -144,10 +136,10 @@ no_option_symbols.grid(row=2,column=0)
 #Numbers options text
 numbers_label : Label = tk.Label(window,
 	                            text='Do you want numbers in your password',
-	                            font=('Arial', 15, 'bold'),
+	                            font=('Helvetica', 15),
 	                            bg='black',
 	                            fg='#d48f28')
-numbers_label.grid(row=3,column=0)
+numbers_label.grid(row=1,column=1)
 
 #Numbers options
 numbers_or_no_numbers = IntVar()
@@ -162,7 +154,7 @@ yes_option_numbers : Radiobutton = tk.Radiobutton(window,
 	                                            font=('Arial', 15, 'bold'),
 	                                            activebackground='black',
 	                                            activeforeground='#1c7a21')
-yes_option_numbers.grid(row=4, column=0)
+yes_option_numbers.grid(row=2, column=1)
 
 #no option
 no_option_numbers : Radiobutton = tk.Radiobutton(window,
@@ -174,7 +166,7 @@ no_option_numbers : Radiobutton = tk.Radiobutton(window,
 	                                            font=('Arial', 15, 'bold'),
 	                                            activebackground='black',
 	                                            activeforeground='#fc3503')
-no_option_numbers.grid(row=5, column=0)
+no_option_numbers.grid(row=3, column=1)
 
 
 
@@ -186,23 +178,73 @@ label : Label = tk.Label(window,
 	             font=('Arial', 11, 'bold'),
 	             bg='black',
 	             fg='#2060a1')
-label.grid(row=6, column=0)
+label.grid(row=7, column=0)
 
 #amount of characters's entry
 character_amount_entry : entry = Entry(window,
-	                                   font=('Arial', 50))
-character_amount_entry.grid(row=7,column=0)
+	                                   font=('Arial', 35))
+character_amount_entry.grid(row=8,column=0)
+
+# enabling entry function after user did not put integer
+def enable_entry(secondary_window: tkinter) -> None:
+	"""
+	Enables the character_amount_entry's state
+	and makes the error window disappear from the user's screen
+
+	param: 'secondary_window' is the 'error window' that will appear if the user does not put an integer number in the entry box
+	
+	"""
+
+	character_amount_entry.config(state='normal')
+	secondary_window.destroy()
 
 
+# 'Check entry's value' function 
+def check_entry_value(get_value_entry: Entry) -> None:
+    """
+    Checks if the value of the user's entry is an integer
+    otherwise, it displays another window for the error
+
+    param: 'get_value_entry' is the user input entry
+    
+    """
+    
+    box = get_value_entry.get()
+    try:
+      # If the user puts an integer number, it calls the 'strong_password_generator' function to display a password	
+      val = int(box)
+      strong_password_generator(character_amount_entry, symbol_or_no_Symbols, numbers_or_no_numbers, password_displayed_entry)
+    except: # Otherwise, it disables the user's entry box and displays the Error window
+      get_value_entry.config(state="disabled")
+      new_window = tk.Toplevel(window)
+      new_window.title('Value type Error')
+      Error_window_icon : PhotoImage = tk.PhotoImage(file="C:\\Users\\ecalexandre\\Downloads\\errorimage.png")
+      new_window.iconphoto(False, Error_window_icon)
+      new_window.geometry('400x400') 
+      new_window.resizable(0,0)
+      label = tk.Label(new_window, text="Error: this is not an integer number")
+      verify_button = Button(new_window, text='Enable text box', command=lambda: enable_entry(new_window))
+      verify_button.pack()
+      label.pack()
 
 # Bind the Enter key to the entry box
-def enter_pressed(event) -> None:
+def enter_pressed(event: tkinter) -> None:
     """
     Gets the value of the entry of the character amount and calls the strong_password_generator() function to show the password
-    """
+    only if the entry's state is enabled
 
-    character_amount_entry.get()
-    strong_password_generator(character_amount_entry, symbol_or_no_Symbols, numbers_or_no_numbers, password_displayed_entry)
+    param: 'event' is an object that Tkinter automatically creates and passes to your function 
+           whenever a bound action (like a key press or mouse click) occurs
+    
+    """
+    character_amount_entry_state = character_amount_entry.cget("state")
+    match character_amount_entry_state:
+    	case "disabled":
+    	   pass
+    	case "normal":
+         character_amount_entry.get()
+         check_entry_value(character_amount_entry)
+
 character_amount_entry.bind('<Return>', enter_pressed) #checks if user pressed Enter will call enter_pressed() function
 
 
@@ -212,18 +254,18 @@ password_label : Label = tk.Label(window,
 	                      font=('Courier', 15),
 	                      bg='black',
 	                      fg='#699e24')
-password_label.grid(row=8,column=0)
+password_label.grid(row=9,column=0)
 
 
 
 #Password displayed entry
 password_displayed_entry : Entry = Entry(window,
 	                                    font=('Arial', 50),)
-password_displayed_entry.grid(row=9,column=0)
+password_displayed_entry.grid(row=10,column=0)
 
 
 
-#copy password function for button
+'''copy password function for button'''
 def copy_text() -> None:
    # 1. Clears the system clipboard
    window.clipboard_clear()
@@ -239,6 +281,8 @@ copy_password_button : Button = tk.Button(window,
 	                                      activebackground='black',
 	                                      activeforeground='#f2e124',
 	                                      command=copy_text)
-copy_password_button.grid(row=9, column=1)	                                         
+copy_password_button.grid(row=11, column=0)	                                         
 
+
+#keeps window active until closed
 window.mainloop()
