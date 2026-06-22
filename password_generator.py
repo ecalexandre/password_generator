@@ -1,4 +1,6 @@
-import random
+import random, customtkinter as ctk
+import tkinter as tk
+from tkinter import *
 
 # Strong password generator function
 def strong_password_generator(get_value_entry:Entry,symbol_option:IntVar,number_option:IntVar,display_place_entry:Entry) -> None:
@@ -13,6 +15,7 @@ def strong_password_generator(get_value_entry:Entry,symbol_option:IntVar,number_
     4. 'display_place_entry' is the entry for the displayed password
 
     """
+    
     characters_without_numbers : list[str] = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n'
                                    'o', 'p', 'q' 'r' 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
                                    '#','$','%','*','(',')','@','!']
@@ -33,174 +36,205 @@ def strong_password_generator(get_value_entry:Entry,symbol_option:IntVar,number_
     
     # Results for symbols and numbers options
     match symbol_option.get(), number_option.get():
-    	
-    	# If Yes for both symbols and numbers ---> Password will mostly contain symbols and numbers
-    	case 1,1:
-    	  random_characters_with_numbers_and_symbols : random = random.choices(characters_with_numbers_and_symbols, k=val)
-    	  
-    	  random_password_with_numbers_and_symbols : join = "".join(random_characters_with_numbers_and_symbols)
-    	  
-    	  display_place_entry.delete(0,END)
-    	  
-    	  display_place_entry.insert(0,random_password_with_numbers_and_symbols)
-    	
-    	# If Yes to symbols but No to numbers ---> Password will contain symbols but not numbers
-    	case 1,2:
+        
+        # If Yes for both symbols and numbers ---> Password will mostly contain symbols and numbers
+        case 1,1:
+          random_characters_with_numbers_and_symbols : random = random.choices(characters_with_numbers_and_symbols, k=val)
+          
+          random_password_with_numbers_and_symbols : join = "".join(random_characters_with_numbers_and_symbols)
+          
+          display_place_entry.delete("0.0","end")
+          
+          display_place_entry.insert("0.0",random_password_with_numbers_and_symbols)
+        
+        # If Yes to symbols but No to numbers ---> Password will contain symbols but not numbers
+        case 1,2:
           random_characters_without_numbers : random = random.choices(characters_without_numbers, k=val)
           
           random_password_without_numbers : join = "".join(random_characters_without_numbers)
           
-          display_place_entry.delete(0,END)
+          display_place_entry.delete("0.0","end")
           
-          display_place_entry.insert(0, random_password_without_numbers)
-    	
-    	# If No to symbols but Yes to numbers ---> Password will contain numbers but not symbols
-    	case 2,1:
+          display_place_entry.insert("0.0", random_password_without_numbers)
+        
+        # If No to symbols but Yes to numbers ---> Password will contain numbers but not symbols
+        case 2,1:
           random_characters_without_symbols : random = random.choices(characters_without_symbols, k=val)
           
           random_password_without_symbols : join = "".join(random_characters_without_symbols)
           
-          display_place_entry.delete(0,END)
+          display_place_entry.delete("0.0","end")
           
-          display_place_entry.insert(0, random_password_without_symbols)
-    	
-    	# If No to both symbols and numbers ---> Password will not contain symbols or numbers
-    	case 2,2:
+          display_place_entry.insert("0.0", random_password_without_symbols)
+        
+        # If No to both symbols and numbers ---> Password will not contain symbols or numbers
+        case 2,2:
           random_characters_without_symbols_and_numbers : random = random.choices(characters_without_symbols_and_numbers, k=val)
           
           random_password_without_symbols_and_numbers : join = "".join(random_characters_without_symbols_and_numbers)
           
-          display_place_entry.delete(0,END)
+          display_place_entry.delete("0.0","end")
           
-          display_place_entry.insert(0, random_password_without_symbols_and_numbers)    
+          display_place_entry.insert("0.0", random_password_without_symbols_and_numbers)
+        
+        # If no option was chosen, the password will contain only letters
+        case _: 
+          random_characters_without_symbols_and_numbers : random = random.choices(characters_without_symbols_and_numbers, k=val)
+          
+          random_password_without_symbols_and_numbers : join = "".join(random_characters_without_symbols_and_numbers)
+          
+          display_place_entry.delete("0.0","end")
+          
+          display_place_entry.insert("0.0", random_password_without_symbols_and_numbers)
 
 
-import tkinter as tk; from tkinter import *
+import customtkinter as ctk
+from customtkinter import *
 
-#creating the window
-window = Tk()
+# Create a window
+window = CTk()
 
-window.resizable(0,0)
+# Makes window unresizable
+window.resizable(False, False) # height and width
 
-#window background color
-window.configure(bg='black')
+# window title
+window.title("Random Password Generator")
 
-#window Title
-window.title('Random Password Generator')
+# window dimensions
+window.geometry("900x300") # width and height
 
-#window's dimensions
-window.geometry('1200x400')
-
-#app icon image
+# app icon
 app_icon : PhotoImage = tk.PhotoImage(file="C:\\Users\\ecalexandre\\Downloads\\password.png")
-window.iconphoto(True, app_icon)
+window.after(200, lambda: window.iconphoto(False, app_icon))
 
-#symbols/no symbols text
-symbols_label : Label = tk.Label(window,
-	                             text='Do you want symbols in your password',
-	                             font=('Arial', 15, 'bold'),
-	                             bg='black',
-	                             fg='#a024f2')
+frame_1 : Frame = ctk.CTkFrame(window,
+	                            width=200,
+	                            bg_color='#3c0a3d')
+frame_1.grid(row=1,column=0)
+
+# 'symbols/no symbols' text
+symbols_label : Label = ctk.CTkLabel(frame_1, 
+                                    text='Do you want symbols in your password',
+                                    font=('Arial', 15),
+                                    pady=10,
+                                    padx=10)
 symbols_label.grid(row=1,column=0)
 
-#Symbols/No symbols options
-symbol_or_no_Symbols = IntVar()
+# symbols/no symbols options variable
+symbol_or_no_symbols = IntVar()
 
-#yes option
-yes_option_symbols : Radiobutton = Radiobutton(window,
-	                                           text='Yes 👍',
-	                                           variable=symbol_or_no_Symbols,
-	                                           value=1,
-	                                           fg='#1c7a21',
-	                                           bg='black',
-	                                           font=('Arial', 15, 'bold'),
-	                                           activebackground='black',
-	                                           activeforeground='#1c7a21')
+# Yes option
+yes_option_symbols : Radiobutton = ctk.CTkRadioButton(frame_1,
+                                                      text='Yes 👍',
+                                                      variable=symbol_or_no_symbols,
+                                                      value=1,
+                                                      font=('Arial', 15))
 yes_option_symbols.grid(row=2,column=0)
 
-#no option
-no_option_symbols : Radiobutton = Radiobutton(window,
-	                                          text='No 👎',
-	                                          variable=symbol_or_no_Symbols,
-	                                          value=2,
-	                                          fg='#fc3503',
-	                                          bg='black',
-	                                          font=('Arial', 15, 'bold'),
-	                                          activebackground='black',
-	                                          activeforeground='#fc3503')
+# No option
+no_option_symbols : Radiobutton = ctk.CTkRadioButton(frame_1,
+                                                     text='No 👎',
+                                                     variable=symbol_or_no_symbols,
+                                                     value=2,
+                                                     font=('Arial', 15))
 no_option_symbols.grid(row=3,column=0)
 
+frame_2 : Frame = ctk.CTkFrame(window,
+	                           width=200,
+	                           bg_color='#0c0a3d')
+frame_2.grid(row=1, column=1)
 
-
-
-#Numbers options text
-numbers_label : Label = tk.Label(window,
-	                            text='Do you want numbers in your password',
-	                            font=('Helvetica', 15),
-	                            bg='black',
-	                            fg='#d48f28')
+# Numbers option text
+numbers_label : Label = ctk.CTkLabel(frame_2,
+                                    text='Do you want numbers in your password',
+                                    font=('Arial', 15),
+                                    padx=10)
 numbers_label.grid(row=1,column=1)
 
-#Numbers options
+# Numbers/no numbers options variable
 numbers_or_no_numbers = IntVar()
 
-#yes option
-yes_option_numbers : Radiobutton = tk.Radiobutton(window,
-	                                            text='Yes 👍',
-	                                            variable=numbers_or_no_numbers,
-	                                            value=1,
-	                                            fg='#1c7a21',
-	                                            bg='black',
-	                                            font=('Arial', 15, 'bold'),
-	                                            activebackground='black',
-	                                            activeforeground='#1c7a21')
-yes_option_numbers.grid(row=2, column=1)
+# Yes option
+yes_option_numbers : Radiobutton = ctk.CTkRadioButton(frame_2,
+                                                      text='Yes 👍',
+                                                      variable=numbers_or_no_numbers,
+                                                      value=1,
+                                                      font=('Arial', 15))
+yes_option_numbers.grid(row=2,column=1)
 
-#no option
-no_option_numbers : Radiobutton = tk.Radiobutton(window,
-	                                            text='No 👎',
-	                                            variable=numbers_or_no_numbers,
-	                                            value=2,
-	                                            fg='#fc3503',
-	                                            bg='black',
-	                                            font=('Arial', 15, 'bold'),
-	                                            activebackground='black',
-	                                            activeforeground='#fc3503')
-no_option_numbers.grid(row=3, column=1)
+# No option
+no_option_numbers : Radiobutton = ctk.CTkRadioButton(frame_2,
+                                                    text='No 👎',
+                                                    variable=numbers_or_no_numbers,
+                                                    value=2,
+                                                    font=('Arial', 15))
+no_option_numbers.grid(row=3,column=1)
 
+# 'Amount of characters' text
+Aof_label : Label = ctk.CTkLabel(window,
+                                text='Amount of characters (number) for password (Press enter when finished):',
+                                font=('Arial', 14))
+Aof_label.grid(row=10, column=0)
 
+# 'Amount of characters's entry'
+character_amount_entry : Entry = ctk.CTkEntry(window,
+                                              font=('Arial', 35),
+                                              width=200,
+                                              height=50,
+                                              bg_color='green')
+character_amount_entry.grid(row=11, column=0)
 
-
-
-#'Amount of characters' text
-label : Label = tk.Label(window,
-	             text='Amount of characters (number) for password (Press enter when finished):',
-	             font=('Arial', 11, 'bold'),
-	             bg='black',
-	             fg='#2060a1')
-label.grid(row=7, column=0)
-
-#amount of characters's entry
-character_amount_entry : entry = Entry(window,
-	                                   font=('Arial', 35))
-character_amount_entry.grid(row=8,column=0)
 
 # enabling entry function after user did not put integer
 def enable_entry(secondary_window: tkinter) -> None:
-	"""
-	Enables the character_amount_entry's state
-	and makes the error window disappear from the user's screen
+    """
+    Enables the character_amount_entry's state
+    and makes the error window disappear from the user's screen
 
-	param: 'secondary_window' is the 'error window' that will appear if the user does not put an integer number in the entry box
-	
-	"""
+    param: 'secondary_window' is the 'error window' that will appear if the user does not put an integer number in the entry box
+    
+    """
 
-	character_amount_entry.config(state='normal')
-	secondary_window.destroy()
+    character_amount_entry.configure(state='normal')
+    secondary_window.destroy()
 
+
+# error_window displayer
+def error_window_displayer() -> None:
+    """
+    Creates a window that displays the user input value error
+
+    """
+    
+    error_window = ctk.CTkToplevel(window)
+    error_window.attributes("-topmost", True) # To make window appear in front of every other windows
+    
+    # error window's title
+    error_window.title("Value Type Error")
+    
+    # Setting up error window icon image
+    error_window_icon_image = tk.PhotoImage(file="C:\\Users\\ecalexandre\\Downloads\\errorimage.png")
+    error_window.after(250, lambda: error_window.iconphoto(False, error_window_icon_image))
+    
+    # Error window dimensions
+    error_window.geometry('400x100') # width and height
+    
+    # Making error window unsizable
+    error_window.resizable(False, False) # width and height
+    
+    # Label text for error
+    error_label : Label = ctk.CTkLabel(error_window,
+                                       text='Error: this is not an integer number')
+    error_label.pack()
+    
+    # Button to enable user entry box in main window
+    enabling_user_input_button : Button = ctk.CTkButton(error_window,
+                                                        text='Enable text box',
+                                                        command=lambda: enable_entry(error_window))
+    enabling_user_input_button.pack()
 
 # 'Check entry's value' function 
-def check_entry_value(get_value_entry: Entry) -> None:
+def check_entry_value() -> None:
     """
     Checks if the value of the user's entry is an integer
     otherwise, it displays another window for the error
@@ -208,26 +242,15 @@ def check_entry_value(get_value_entry: Entry) -> None:
     param: 'get_value_entry' is the user input entry
     
     """
-    
-    box = get_value_entry.get()
+    user_value = character_amount_entry.get()
     try:
-      # If the user puts an integer number, it calls the 'strong_password_generator' function to display a password	
-      val = int(box)
-      strong_password_generator(character_amount_entry, symbol_or_no_Symbols, numbers_or_no_numbers, password_displayed_entry)
-    except: # Otherwise, it disables the user's entry box and displays the Error window
-      get_value_entry.config(state="disabled")
-      new_window = tk.Toplevel(window)
-      new_window.title('Value type Error')
-      Error_window_icon : PhotoImage = tk.PhotoImage(file="C:\\Users\\ecalexandre\\Downloads\\errorimage.png")
-      new_window.iconphoto(False, Error_window_icon)
-      new_window.geometry('400x400') 
-      new_window.resizable(0,0)
-      label = tk.Label(new_window, text="Error: this is not an integer number")
-      verify_button = Button(new_window, text='Enable text box', command=lambda: enable_entry(new_window))
-      verify_button.pack()
-      label.pack()
+        int_val = int(user_value)
+        strong_password_generator(character_amount_entry, symbol_or_no_symbols, numbers_or_no_numbers, password_displayed_entry)
+    except:
+        character_amount_entry.configure(state='disabled')
+        error_window_displayer()
 
-# Bind the Enter key to the entry box
+# '<Return>' detector
 def enter_pressed(event: tkinter) -> None:
     """
     Gets the value of the entry of the character amount and calls the strong_password_generator() function to show the password
@@ -239,50 +262,44 @@ def enter_pressed(event: tkinter) -> None:
     """
     character_amount_entry_state = character_amount_entry.cget("state")
     match character_amount_entry_state:
-    	case "disabled":
-    	   pass
-    	case "normal":
+        case "disabled":
+           pass
+        case "normal":
          character_amount_entry.get()
-         check_entry_value(character_amount_entry)
+         check_entry_value()
 
-character_amount_entry.bind('<Return>', enter_pressed) #checks if user pressed Enter will call enter_pressed() function
+character_amount_entry.bind('<Return>', enter_pressed) #checks if user pressed Enter will call enter_pressed() function          
 
+# 'Password' text
+password_label : Label = ctk.CTkLabel(window,
+                                      text='Random password 🔐:',
+                                      font=('Courier', 15))
+password_label.grid(row=10, column=1)
 
-#'Password' text
-password_label : Label = tk.Label(window,
-	                      text='Password 🔐:',
-	                      font=('Courier', 15),
-	                      bg='black',
-	                      fg='#699e24')
-password_label.grid(row=9,column=0)
+# Password displayed entry
+password_displayed_entry : textbox = ctk.CTkTextbox(window,
+                                                width=300,
+                                                height=100,
+                                                bg_color='#3d0a12',
+                                                font=('Arial', 16))
+password_displayed_entry.grid(row=11,column=1)
 
-
-
-#Password displayed entry
-password_displayed_entry : Entry = Entry(window,
-	                                    font=('Arial', 50),)
-password_displayed_entry.grid(row=10,column=0)
-
-
-
-'''copy password function for button'''
-def copy_text() -> None:
+# copy password function for button
+def copy_password() -> None:
+   password = password_displayed_entry.get("0.0", "end-1c") 
    # 1. Clears the system clipboard
    window.clipboard_clear()
    # 2. Append the text from the password display entry
-   window.clipboard_append(password_displayed_entry.get())
+   window.clipboard_append(password)
    # 3. Optional : keeps clipboard alive after window closes
    window.update()
 
-copy_password_button : Button = tk.Button(window,
-	                                      text='Copy password',
-	                                      bg='black',
-	                                      fg='#f2e124',
-	                                      activebackground='black',
-	                                      activeforeground='#f2e124',
-	                                      command=copy_text)
-copy_password_button.grid(row=11, column=0)	                                         
+copy_password_button : Button = ctk.CTkButton(window,
+                                          text='Copy password',
+                                          command=copy_password,
+                                          fg_color='#4d2aeb',
+                                          bg_color='#3d0a12')
+copy_password_button.grid(row=13, column=1)
 
-
-#keeps window active until closed
+# Keeps window active until closed
 window.mainloop()
