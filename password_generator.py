@@ -1,6 +1,6 @@
 import random, customtkinter as ctk
-import tkinter as tk
-from tkinter import *
+import tkinter as tk; from tkinter import *
+from customtkinter import *
 
 # Strong password generator function
 def strong_password_generator(get_value_entry:Entry,symbol_option:IntVar,number_option:IntVar,display_place_entry:Entry) -> None:
@@ -15,6 +15,7 @@ def strong_password_generator(get_value_entry:Entry,symbol_option:IntVar,number_
     4. 'display_place_entry' is the entry for the displayed password
 
     """
+
     
     characters_without_numbers : list[str] = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n'
                                    'o', 'p', 'q' 'r' 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -31,7 +32,7 @@ def strong_password_generator(get_value_entry:Entry,symbol_option:IntVar,number_
                                    '#','$','%','*','(',')','@','!', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 
     amount_of_characters = get_value_entry.get()
-    
+
     val : int = int(amount_of_characters)
     
     # Results for symbols and numbers options
@@ -87,10 +88,6 @@ def strong_password_generator(get_value_entry:Entry,symbol_option:IntVar,number_
           
           display_place_entry.insert("0.0", random_password_without_symbols_and_numbers)
 
-
-import customtkinter as ctk
-from customtkinter import *
-
 # Create a window
 window = CTk()
 
@@ -109,7 +106,8 @@ window.after(200, lambda: window.iconphoto(False, app_icon))
 
 frame_1 : Frame = ctk.CTkFrame(window,
 	                            width=200,
-	                            bg_color='#3c0a3d')
+	                            bg_color='#3c0a3d',
+                                fg_color='#0e1211')
 frame_1.grid(row=1,column=0)
 
 # 'symbols/no symbols' text
@@ -117,7 +115,8 @@ symbols_label : Label = ctk.CTkLabel(frame_1,
                                     text='Do you want symbols in your password',
                                     font=('Arial', 15),
                                     pady=10,
-                                    padx=10)
+                                    padx=10,
+                                    text_color='#754ed9')
 symbols_label.grid(row=1,column=0)
 
 # symbols/no symbols options variable
@@ -128,7 +127,8 @@ yes_option_symbols : Radiobutton = ctk.CTkRadioButton(frame_1,
                                                       text='Yes 👍',
                                                       variable=symbol_or_no_symbols,
                                                       value=1,
-                                                      font=('Arial', 15))
+                                                      font=('Arial', 15),
+                                                      text_color='#1e5232')
 yes_option_symbols.grid(row=2,column=0)
 
 # No option
@@ -136,12 +136,14 @@ no_option_symbols : Radiobutton = ctk.CTkRadioButton(frame_1,
                                                      text='No 👎',
                                                      variable=symbol_or_no_symbols,
                                                      value=2,
-                                                     font=('Arial', 15))
+                                                     font=('Arial', 15),
+                                                     text_color='#4d131e')
 no_option_symbols.grid(row=3,column=0)
 
 frame_2 : Frame = ctk.CTkFrame(window,
 	                           width=200,
-	                           bg_color='#0c0a3d')
+	                           bg_color='#0c0a3d',
+                               fg_color='#0e1211')
 frame_2.grid(row=1, column=1)
 
 # Numbers option text
@@ -159,7 +161,8 @@ yes_option_numbers : Radiobutton = ctk.CTkRadioButton(frame_2,
                                                       text='Yes 👍',
                                                       variable=numbers_or_no_numbers,
                                                       value=1,
-                                                      font=('Arial', 15))
+                                                      font=('Arial', 15),
+                                                      text_color='#1e5232')
 yes_option_numbers.grid(row=2,column=1)
 
 # No option
@@ -167,22 +170,90 @@ no_option_numbers : Radiobutton = ctk.CTkRadioButton(frame_2,
                                                     text='No 👎',
                                                     variable=numbers_or_no_numbers,
                                                     value=2,
-                                                    font=('Arial', 15))
+                                                    font=('Arial', 15),
+                                                    text_color='#4d131e')
 no_option_numbers.grid(row=3,column=1)
 
+frame_3 : Frame = ctk.CTkFrame(window,
+                               width=120,
+                               height=50,
+                               fg_color='#0e1211')
+frame_3.grid(row=10,column=0)
+
 # 'Amount of characters' text
-Aof_label : Label = ctk.CTkLabel(window,
-                                text='Amount of characters (number) for password (Press enter when finished):',
-                                font=('Arial', 14))
+Aof_label : Label = ctk.CTkLabel(frame_3,
+                                text='Amount of characters (number) for password\n (Press enter when finished):',
+                                font=('Arial', 15))
 Aof_label.grid(row=10, column=0)
 
 # 'Amount of characters's entry'
-character_amount_entry : Entry = ctk.CTkEntry(window,
+character_amount_entry : Entry = ctk.CTkEntry(frame_3,
                                               font=('Arial', 35),
-                                              width=200,
+                                              width=100,
                                               height=50,
                                               bg_color='green')
-character_amount_entry.grid(row=11, column=0)
+character_amount_entry.grid(row=13, column=0)
+
+
+min_character_label : Label = ctk.CTkLabel(frame_3,
+                                           text='Min: 8 characters',
+                                           font=('Arial', 15),
+                                           text_color='#871a2c')
+min_character_label.grid(row=11, column=0)
+
+max_character_label : Label = ctk.CTkLabel(frame_3,
+                                           text='Max: 130 characters',
+                                           font=('Arial', 15),
+                                           text_color='#871a2c')
+max_character_label.grid(row=12, column=0)
+
+def length_character_too_large_window():
+    user_input = character_amount_entry.get()
+    val = int(user_input)
+    match val:
+        case value if value > 130: # If the amount of character is too large
+            character_amount_entry.configure(state='disabled')
+            character_overload_error_window = ctk.CTkToplevel(window)
+            character_overload_error_window.attributes("-topmost", True) # To make window appear in front of every other windows
+            character_overload_error_window.title("character length Error")
+            character_overload_window_icon_image = tk.PhotoImage(file="C:\\Users\\ecalexandre\\Downloads\\errorimage.png")
+            character_overload_error_window.after(250, lambda: character_overload_error_window.iconphoto(False, character_overload_window_icon_image))
+            character_overload_error_window.geometry('600x100') # width and height
+            character_overload_error_window.resizable(False, False) # width and height
+            length_too_large_label : Label = ctk.CTkLabel(character_overload_error_window,
+                                       text='Error: Amount of character too large! It should be between 8 characters and 130 characters')
+            length_too_large_label.pack()
+            enabling_user_input_button : Button = ctk.CTkButton(character_overload_error_window,
+                                                        text='Enable text box',
+                                                        command=lambda: enable_entry(character_overload_error_window))
+            enabling_user_input_button.pack()
+
+        case _:
+           pass    
+
+def length_character_too_small_window():
+    user_input = character_amount_entry.get()
+    val = int(user_input)
+    match val:
+        case value if value < 8:
+            character_amount_entry.configure(state='disabled')
+            character_underload_error_window = ctk.CTkToplevel(window)
+            character_underload_error_window.attributes("-topmost", True)
+            character_underload_error_window.title("character length Error")
+            character_underload_window_icon_image = tk.PhotoImage(file="C:\\Users\\ecalexandre\\Downloads\\errorimage.png")
+            character_underload_error_window.after(250, lambda: character_underload_error_window.iconphoto(False, character_underload_window_icon_image))
+            character_underload_error_window.geometry('600x100') # width and height
+            character_underload_error_window.resizable(False, False) # width and height
+            length_too_small_label : Label = ctk.CTkLabel(character_underload_error_window,
+                                       text='Error: Amount of character too small! It should be between 8 characters and 130 characters')
+            length_too_small_label.pack()
+            enabling_userinput_button : Button = ctk.CTkButton(character_underload_error_window,
+                                                                text='Enable text box',
+                                                                command=lambda: enable_entry(character_underload_error_window))
+            enabling_userinput_button.pack()
+
+        case _:
+           pass    
 
 
 # enabling entry function after user did not put integer
@@ -233,22 +304,34 @@ def error_window_displayer() -> None:
                                                         command=lambda: enable_entry(error_window))
     enabling_user_input_button.pack()
 
+
 # 'Check entry's value' function 
 def check_entry_value() -> None:
     """
-    Checks if the value of the user's entry is an integer
+    Checks if the value of the user's entry is an integer or if it is not too large or too low
     otherwise, it displays another window for the error
 
     param: 'get_value_entry' is the user input entry
     
     """
     user_value = character_amount_entry.get()
+            
     try:
         int_val = int(user_value)
-        strong_password_generator(character_amount_entry, symbol_or_no_symbols, numbers_or_no_numbers, password_displayed_entry)
+        match int_val:
+            case value if value > 130:
+               length_character_too_large_window()
+
+            case value if value < 8:
+               length_character_too_small_window()
+
+            case _:
+                strong_password_generator(character_amount_entry, symbol_or_no_symbols, numbers_or_no_numbers, password_displayed_entry)
+          
     except:
         character_amount_entry.configure(state='disabled')
         error_window_displayer()
+
 
 # '<Return>' detector
 def enter_pressed(event: tkinter) -> None:
@@ -274,7 +357,7 @@ character_amount_entry.bind('<Return>', enter_pressed) #checks if user pressed E
 password_label : Label = ctk.CTkLabel(window,
                                       text='Random password 🔐:',
                                       font=('Courier', 15))
-password_label.grid(row=10, column=1)
+password_label.grid(row=9, column=2)
 
 # Password displayed entry
 password_displayed_entry : textbox = ctk.CTkTextbox(window,
@@ -282,7 +365,7 @@ password_displayed_entry : textbox = ctk.CTkTextbox(window,
                                                 height=100,
                                                 bg_color='#3d0a12',
                                                 font=('Arial', 16))
-password_displayed_entry.grid(row=11,column=1)
+password_displayed_entry.grid(row=10,column=2)
 
 # copy password function for button
 def copy_password() -> None:
@@ -299,7 +382,7 @@ copy_password_button : Button = ctk.CTkButton(window,
                                           command=copy_password,
                                           fg_color='#4d2aeb',
                                           bg_color='#3d0a12')
-copy_password_button.grid(row=13, column=1)
+copy_password_button.grid(row=12, column=2)
 
 # Keeps window active until closed
 window.mainloop()
